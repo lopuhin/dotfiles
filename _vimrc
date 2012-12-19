@@ -114,7 +114,7 @@ imap <C-W> <C-O><C-W>
 map <leader>n :NERDTreeToggle<CR>
 
 " Run command-t file search
-map <leader>f :CommandT<CR>
+"map <leader>f :CommandT<CR>
 " Ack searching
 nmap <leader>a <Esc>:Ack!
 
@@ -140,7 +140,7 @@ call pathogen#helptags()
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
 filetype plugin indent on     " enable loading indent file for filetype
-set number                    " Display line numbers
+"set number                    " Display line numbers
 set numberwidth=1             " using only 1 column (and 1 space) while possible
 set background=dark           " We are using dark background in vim
 set title                     " show title in console title bar
@@ -173,7 +173,7 @@ set pumheight=6             " Keep a small completion window
 
 
 """ Moving Around/Editing
-set cursorline              " have a line indicate the cursor location
+"set cursorline              " have a line indicate the cursor location
 set ruler                   " show the cursor position all the time
 set nostartofline           " Avoid moving cursor to BOL when jumping around
 set virtualedit=block       " Let cursor move past the last char in <C-v> mode
@@ -221,7 +221,7 @@ set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})\ %{fugitive#statusline()}
 
 " displays tabs with :set list & displays when a line runs off-screen
 set listchars=tab:>-,eol:$,trail:-,precedes:<,extends:>
-set list
+"set list
 
 """ Searching and Patterns
 set ignorecase              " Default to using case insensitive searches,
