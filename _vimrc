@@ -111,7 +111,10 @@ map <c-h> <c-w>h
 imap <C-W> <C-O><C-W>
 
 " Open NerdTree
-map <leader>n :NERDTreeToggle<CR>
+" map <leader>n :NERDTreeToggle<CR>
+
+" CtrlP plugin
+let g:ctrlp_working_path_mode = ''
 
 " Run command-t file search
 "map <leader>f :CommandT<CR>
