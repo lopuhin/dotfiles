@@ -20,9 +20,6 @@
 " Pytest
 "     Runs your Python tests in Vim.
 "
-" Commant-T
-"     Allows easy search and opening of files within a given path
-"
 " Snipmate
 "     Configurable snippets to avoid re-typing common comands
 "
@@ -52,6 +49,8 @@
 " ==========================================================
 set nocompatible              " Don't be compatible with vi
 let mapleader=","             " change the leader to be a comma vs slash
+
+set langmap=йцукенгшщзхъфывапролджэячсмитьбю/ЙЦУКЕHГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ/;qwertyuiop[]asdfghjkl;'zxcvbnm,./QWERTYUIOP[]ASDFGHJKL:'ZXCVBNM,./
 
 " Seriously, guys. It's not like :W is bound to anything anyway.
 command! W :w
@@ -111,10 +110,11 @@ map <c-h> <c-w>h
 imap <C-W> <C-O><C-W>
 
 " Open NerdTree
-map <leader>n :NERDTreeToggle<CR>
+" map <leader>n :NERDTreeToggle<CR>
 
-" Run command-t file search
-map <leader>f :CommandT<CR>
+" CtrlP plugin
+let g:ctrlp_working_path_mode = ''
+
 " Ack searching
 nmap <leader>a <Esc>:Ack!
 
@@ -140,9 +140,9 @@ call pathogen#helptags()
 syntax on                     " syntax highlighing
 filetype on                   " try to detect filetypes
 filetype plugin indent on     " enable loading indent file for filetype
-set number                    " Display line numbers
+set nonumber                    " Display line numbers
 set numberwidth=1             " using only 1 column (and 1 space) while possible
-set background=dark           " We are using dark background in vim
+"set background=dark           " We are using dark background in vim
 set title                     " show title in console title bar
 set wildmenu                  " Menu completion in command mode on <Tab>
 set wildmode=full             " <Tab> cycles between all matching choices.
@@ -169,11 +169,12 @@ nnoremap <leader>. :lcd %:p:h<CR>
 """ Insert completion
 " don't select first item, follow typing in autocomplete
 set completeopt=menuone,longest,preview
-set pumheight=6             " Keep a small completion window
+set complete=b
+set pumheight=8             " Keep a small completion window
 
 
 """ Moving Around/Editing
-set cursorline              " have a line indicate the cursor location
+"set cursorline              " have a line indicate the cursor location
 set ruler                   " show the cursor position all the time
 set nostartofline           " Avoid moving cursor to BOL when jumping around
 set virtualedit=block       " Let cursor move past the last char in <C-v> mode
@@ -221,7 +222,7 @@ set statusline=[%l,%v\ %P%M]\ %f\ %r%h%w\ (%{&ff})\ %{fugitive#statusline()}
 
 " displays tabs with :set list & displays when a line runs off-screen
 set listchars=tab:>-,eol:$,trail:-,precedes:<,extends:>
-set list
+"set list
 
 """ Searching and Patterns
 set ignorecase              " Default to using case insensitive searches,
@@ -232,14 +233,14 @@ set incsearch               " Incrementally search while typing a /regex
 
 """" Display
 if has("gui_running")
-    colorscheme desert
+    colorscheme delek
     " Remove menu bar
     set guioptions-=m
 
     " Remove toolbar
     set guioptions-=T
 else
-    colorscheme torte
+    colorscheme delek
 endif
 
 " Paste from clipboard
@@ -260,7 +261,7 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " ==========================================================
 " Javascript
 " ==========================================================
-au BufRead *.js set makeprg=jslint\ %
+au BufRead *.js set makeprg=jshint\ %
 
 " Use tab to scroll through autocomplete menus
 "autocmd VimEnter * imap <expr> <Tab> pumvisible() ? "<C-N>" : "<Tab>"
@@ -272,19 +273,28 @@ let g:acp_completeoptPreview=1
 " FileType specific changes
 " ============================================================
 " Mako/HTML
-autocmd BufNewFile,BufRead *.mako,*.mak,*.jinja2 setlocal ft=html
-autocmd FileType html,xhtml,xml,css setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
+autocmd BufNewFile,BufRead *.mako,*.mak,*.jinja2,*.mustache setlocal ft=html
+"autocmd FileType html,xhtml,xml,css setlocal expandtab shiftwidth=2 tabstop=2 softtabstop=2
 
 " Python
 "au BufRead *.py compiler nose
 au FileType python set omnifunc=pythoncomplete#Complete
 au FileType python setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+au FileType python set colorcolumn=79
 au FileType coffee setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
 au BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 " Don't let pyflakes use the quickfix window
 let g:pyflakes_use_quickfix = 0
+" Jedi auto-completion
+"let g:jedi#popup_on_dot = 0
 
+"let g:syntastic_python_checker = 'pylint'
 
+" Rust
+au BufRead *.rs set ft=rust
+
+" Handlebars templates
+au BufRead *.handlebars set ft=html
 
 " Add the virtualenv's site-packages to vim path
 if has('python')
@@ -305,4 +315,17 @@ if filereadable($VIRTUAL_ENV . '/.vimrc')
     source $VIRTUAL_ENV/.vimrc
 endif
 
-set colorcolumn=79
+" Go lang
+set rtp+=/usr/local/go/misc/vim
+au BufRead *.go set ft=go noexpandtab
+
+" Highlight unwanted space
+highlight ExtraWhitespace ctermbg=red guibg=red
+match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+
+" JSX (React)
+"let g:jsx_ext_required = 0
